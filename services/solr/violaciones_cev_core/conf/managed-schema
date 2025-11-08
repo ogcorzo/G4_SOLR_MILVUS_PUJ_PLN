@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="violaciones_cev_core" version="1.6">
+
+  <!-- Tipos de campos -->
+  <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+
+  <!-- Tipo de campo con normalización léxica y BM25 -->
+  <fieldType name="text_bm25_lex" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+      <tokenizer class="solr.StandardTokenizerFactory"/>
+      <filter class="solr.LowerCaseFilterFactory"/>
+      <filter class="solr.ASCIIFoldingFilterFactory"/>
+    </analyzer>
+    <similarity class="solr.BM25SimilarityFactory">
+      <float name="k1">1.2</float>
+      <float name="b">0.75</float>
+    </similarity>
+  </fieldType>
+
+  <!-- Campos del documento -->
+  <field name="id" type="string" indexed="true" stored="true" required="true"/>
+  <field name="text_raw" type="string" indexed="true" stored="true"/>
+  <field name="text_norm" type="text_bm25_lex" indexed="true" stored="true"/>
+
+  <!-- Clave única -->
+  <uniqueKey>id</uniqueKey>
+
+  <!-- Parser por defecto -->
+  <solrQueryParser defaultOperator="AND"/>
+</schema>

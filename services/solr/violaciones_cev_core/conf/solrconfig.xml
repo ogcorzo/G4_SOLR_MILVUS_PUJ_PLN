@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+  <!-- Modelo global de similitud BM25 -->
+  <similarity class="solr.BM25SimilarityFactory">
+    <float name="k1">1.2</float>
+    <float name="b">0.75</float>
+  </similarity>
+
+  <luceneMatchVersion>9.10.0</luceneMatchVersion>
+
+  <!-- Handlers -->
+  <requestHandler name="/select" class="solr.SearchHandler">
+    <lst name="defaults">
+      <str name="df">text_norm</str>
+      <str name="q.op">AND</str>
+    </lst>
+  </requestHandler>
+
+  <requestHandler name="/update" class="solr.UpdateRequestHandler"/>
+
+  <!-- AutoCommit -->
+  <autoCommit>
+    <maxTime>15000</maxTime>
+  </autoCommit>
+</config>

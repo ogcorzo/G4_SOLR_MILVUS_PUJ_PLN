@@ -1,4 +1,4 @@
-version: '3'
+version: "3.8"
 services:
   solr:
     image: solr:latest
@@ -35,29 +35,29 @@ services:
 
 # --- Milvus (vector database) ---
   milvus:
-        image: milvusdb/milvus:2.4.4
-        container_name: milvus
-        ports:
-          - "19530:19530"
-          - "9091:9091"
-        environment:
-          MILVUS_LOG_LEVEL: info
-        volumes:
-          - milvus-data:/var/lib/milvus
-        restart: unless-stopped
+    image: milvusdb/milvus:2.6.4
+    container_name: milvus
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    environment:
+      MILVUS_LOG_LEVEL: info
+    volumes:
+      - milvus-data:/var/lib/milvus
+    restart: unless-stopped
     
       # --- Servicio embeddings para cargar corpus en Milvus ---
   embeddings:
-        image: python:3.10-slim
-        container_name: embeddings
-        volumes:
-          - ./data/corpus:/data/corpus
-          - ./scripts:/scripts
-        working_dir: /scripts
-        command: >
-          bash -c "pip install pymilvus sentence-transformers tqdm && python load_to_milvus.py"
-        depends_on:
-          - milvus
+    image: python:3.10-slim
+    container_name: embeddings
+    volumes:
+      - ./data/corpus:/data/corpus
+      - ./scripts:/scripts
+    working_dir: /scripts
+    command: >
+        bash -c "pip install pymilvus sentence-transformers tqdm && python load_to_milvus.py"
+    depends_on:
+      - milvus
 
 volumes:
   solr-db:

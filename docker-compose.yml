@@ -1,0 +1,27 @@
+version: '3'
+services:
+  solr:
+    image: solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - solr-db:/var/solr
+    command: >
+      bash -c "solr-precreate lyrics_example"
+
+  doccano:
+    image: doccano/doccano
+    container_name: doccano
+    environment:
+      ADMIN_USERNAME: admin
+      ADMIN_EMAIL: morenoluis@javeriana.edu.co
+      ADMIN_PASSWORD: admin123&
+    volumes:
+      - doccano-db:/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+volumes:
+  solr-db:
+  doccano-db:

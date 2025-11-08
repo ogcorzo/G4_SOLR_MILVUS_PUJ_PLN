@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  solr:
+    image: solr:latest
+    container_name: solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - solr_data:/var/solr
+    environment:
+      - SOLR_HOME=/var/solr/data
+    command:
+      - solr-precreate
+      - mycore  # nombre del core que quieres crear por defecto
+
+volumes:
+  solr_data:

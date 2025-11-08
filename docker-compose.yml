@@ -1,13 +1,23 @@
 version: '3'
 services:
   solr:
-    image: solr
+    image: solr:latest
     ports:
       - "8983:8983"
     volumes:
       - solr-db:/var/solr
+      - ./data/corpus:/data/corpus  # Montamos tu carpeta local
     command: >
-      bash -c "solr-precreate lyrics_example"
+      bash -c "
+      solr-precreate violaciones_cev_core &&
+      echo 'Esperando a que Solr esté listo...' &&
+      until curl -s http://localhost:8983/solr/violaciones_cev_core/admin/ping | grep -q 'OK'; do sleep 10; done &&
+      echo 'Indexando corpus JSONL...' &&
+      curl -s -X POST -H 'Content-Type: application/json' --data-binary @/data/corpus/books_for_solr.jsonl \
+        'http://localhost:8983/solr/violaciones_cev_core/update?commit=true' &&
+      echo 'Indexación completa.
+      "
+    restart: unless-stopped
 
   doccano:
     image: doccano/doccano

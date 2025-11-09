@@ -1,0 +1,6 @@
+pymilvus==2.3.4
+sentence-transformers
+tqdm
+numpy
+marshmallow >= 3.13,<4.0
+environs>=9.5.0
